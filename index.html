@@ -103,62 +103,17 @@
         }
 
         function getJsonOfChoosenElementFromLocalStorage (idOfTheChosenElement) {
-            if (idOfTheChosenElement == 0) {
-                if (localStorage.getItem('id0') === null) {
-                    downloadJsonOfChosenElementFromServer(idOfTheChosenElement);
-                } else {
-                    dropDataToTheTable(JSON.parse(localStorage.getItem('id0')));
-                }
-            } else if (idOfTheChosenElement == 1) {
-                if (localStorage.getItem('id1') === null) {
-                    downloadJsonOfChosenElementFromServer(idOfTheChosenElement);
-                } else {
-                    dropDataToTheTable(JSON.parse(localStorage.getItem('id1')));
-                }
-            } else if (idOfTheChosenElement == 2) {
-                if (localStorage.getItem('id2') === null) {
-                    downloadJsonOfChosenElementFromServer(idOfTheChosenElement);
-                } else {
-                    dropDataToTheTable(JSON.parse(localStorage.getItem('id2')));
-                }
-            } else if (idOfTheChosenElement == 3) {
-                if (localStorage.getItem('id3') === null) {
-                    downloadJsonOfChosenElementFromServer(idOfTheChosenElement);
-                } else {
-                    dropDataToTheTable(JSON.parse(localStorage.getItem('id3')));
-                }
-            } else if (idOfTheChosenElement == 4) {
-                if (localStorage.getItem('id4') === null) {
-                    downloadJsonOfChosenElementFromServer(idOfTheChosenElement);
-                } else {
-                    dropDataToTheTable(JSON.parse(localStorage.getItem('id4')));
-                }
-            } else if (idOfTheChosenElement == 5) {
-                if (localStorage.getItem('id5') === null) {
-                    downloadJsonOfChosenElementFromServer(idOfTheChosenElement);
-                } else {
-                    dropDataToTheTable(JSON.parse(localStorage.getItem('id5')));
-                }
+            
+            if (localStorage.getItem('id'+ idOfTheChosenElement.toString()) === null) {
+                downloadJsonOfChosenElementFromServer(idOfTheChosenElement);
+            } else {
+                dropDataToTheTable(JSON.parse(localStorage.getItem('id'+ idOfTheChosenElement.toString())));
             }
         }
 
         function downloadJsonOfChosenElementFromServer (idOfTheChosenElement) {
             var xhr = new XMLHttpRequest();
-
-            if (idOfTheChosenElement == 0) {
-                xhr.open('GET','id0.json', true);
-            } else if (idOfTheChosenElement == 1) {
-                xhr.open('GET','id1.json', true);
-            } else if (idOfTheChosenElement == 2) {
-                xhr.open('GET','id2.json', true);
-            } else if (idOfTheChosenElement == 3) {
-                xhr.open('GET','id3.json', true);
-            } else if (idOfTheChosenElement == 4) {
-                xhr.open('GET','id4.json', true);
-            } else if (idOfTheChosenElement == 5) {
-                xhr.open('GET','id5.json', true);
-            }
-
+            xhr.open('GET','id'+idOfTheChosenElement+'.json', true);
             xhr.send();
             xhr.onreadystatechange = () => {
                 if(xhr.readyState != 4) return;
@@ -188,8 +143,8 @@
             dropDataToTheTable(response);
         }
 
-        function dropDataToTheTable (data) {
-            data.forEach(item => {
+        function dropDataToTheTable (arrOfSingleEmployee) {
+            arrOfSingleEmployee.forEach(item => {
                 let arrayOfIdData = [];
                 arrayOfIdData.push(item.name);
                 arrayOfIdData.push(item.surname);
