@@ -1,0 +1,32 @@
+[
+	{
+		"id": 0,
+		"parent_id": null,
+		"name": "IT Department Head"
+	},
+	{
+		"id": 1,
+		"parent_id": 0,
+		"name": "Team Lead"
+	},
+	{
+		"id": 2,
+		"parent_id": 1,
+		"name": "Front-end Developer"
+	},
+	{
+		"id": 3,
+		"parent_id": null,
+		"name": "QA Department Head"
+	},
+	{
+		"id": 4,
+		"parent_id": 3,
+		"name": "Test Lead"
+	},
+	{
+		"id": 5,
+		"parent_id": 4,
+		"name": "QA Engineer"
+	}
+]
