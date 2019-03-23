@@ -35,3 +35,10 @@ Car.prototype.calculateWay = function(kilometres, fuel) {
     console.log(`You will need to refuel ${Math.ceil(kilometres / 100 * this.fuelConsumption / this.fuelCapacity)} times.`);
   }
 }
+
+function extend(Child, Parent) {
+  Child.prototype = Object.create(Parent.prototype);
+  Child.prototype.constructor = Child;
+  Child.superclass = Parent.prototype;
+}
+
