@@ -42,9 +42,38 @@ function extend(Child, Parent) {
   Child.superclass = Parent.prototype;
 }
 
-function BMW(name, model, year, color, maxSpeed, fuelCapacity = 60, fuelConsumption = 10) {
+extend(BMW, Car);
+extend(Lexus, Car);
+extend(Toyota, Car);
+
+
+function BMW(name, model, year, color, maxSpeed, fuelCapacity = 60, fuelConsumption = 12, country, sunRoof) {
   BMW.superclass.constructor.call(this, name, model, year, color, maxSpeed, fuelCapacity, fuelConsumption);
-  // добавить других свойств
+  this.country = country;
+  this.sunRoof = sunRoof;
 }
 
-extend(BMW, Car);
+BMW.prototype.turnOnMusic = function() {
+  console.log('pa-pa para-para pa-pa ...');
+}
+
+function Lexus(name, model, year, color, maxSpeed, fuelCapacity = 50, fuelConsumption = 11, country, climateControl) {
+  Lexus.superclass.constructor.call(this, name, model, year, color, maxSpeed, fuelCapacity, fuelConsumption);
+  this.country = country;
+  this.climateControl = climateControl;
+}
+
+Lexus.prototype.beep = function() {
+  console.log('beep-beep-beep ...');
+}
+
+function Toyota(name, model, year, color, maxSpeed, fuelCapacity = 45, fuelConsumption = 8, country, wheelsDiametr) {
+  Toyota.superclass.constructor.call(this, name, model, year, color, maxSpeed, fuelCapacity, fuelConsumption);
+  this.country = country;
+  this.wheelsDiametr = wheelsDiametr;
+}
+
+Toyota.prototype.chargePhone = function() {
+  console.log('The phone is charging.');
+}
+
