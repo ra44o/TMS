@@ -42,3 +42,9 @@ function extend(Child, Parent) {
   Child.superclass = Parent.prototype;
 }
 
+function BMW(name, model, year, color, maxSpeed, fuelCapacity = 60, fuelConsumption = 10) {
+  BMW.superclass.constructor.call(this, name, model, year, color, maxSpeed, fuelCapacity, fuelConsumption);
+  // добавить других свойств
+}
+
+extend(BMW, Car);
