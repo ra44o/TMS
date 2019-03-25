@@ -9,7 +9,7 @@ function Car(name, model, year, color, maxSpeed, fuelCapacity = 60, fuelConsumpt
 }
 
 Car.prototype.getFullName = function() {
-  return `${this.name} ${this.model}`;
+  return this.name + ' ' + this.model;
 }
 
 Car.prototype.getAge = function() {
@@ -21,18 +21,19 @@ Car.prototype.changeColor = function(newColor) {
     console.log('Your car is in this color already.');
   } else {
     this.color = newColor;
-    console.log(`Color changed on ${this.color}.`);
+    console.log('Color changed on ' + this.color + '.');
   }
 }
 
 Car.prototype.calculateWay = function(kilometres, fuel) {
   if (fuel < 10) {
-    console.log(`You'd better to refuel because you have less than 10 litres of fuel.`);
+    console.log('You\'d better to refuel because you have less than 10 litres of fuel.');
   }
   const wayTime = ((kilometres / (this.maxSpeed * 0.5))*60).toFixed(0);
-  console.log(`You need ${wayTime} minutes to reach your destination.`);
+  console.log('You need' + wayTime + 'minutes to reach your destination.');
   if (this.fuelCapacity - kilometres / 100 * this.fuelConsumption < 0) {
-    console.log(`You will need to refuel ${Math.ceil(kilometres / 100 * this.fuelConsumption / this.fuelCapacity)} times.`);
+    const refuelTimes = Math.ceil(kilometres / 100 * this.fuelConsumption / this.fuelCapacity);
+    console.log('You will need to refuel' + refuelTimes + 'times.');
   }
 }
 
