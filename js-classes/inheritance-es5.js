@@ -47,7 +47,6 @@ extend(BMW, Car);
 extend(Lexus, Car);
 extend(Toyota, Car);
 
-
 function BMW(name, model, year, color, maxSpeed, fuelCapacity = 60, fuelConsumption = 12, country, sunRoof) {
   BMW.superclass.constructor.call(this, name, model, year, color, maxSpeed, fuelCapacity, fuelConsumption);
   this.country = country;
@@ -77,4 +76,3 @@ function Toyota(name, model, year, color, maxSpeed, fuelCapacity = 45, fuelConsu
 Toyota.prototype.chargePhone = function() {
   console.log('The phone is charging.');
 }
-
