@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>From JSON to table</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+</head>
+<body onload = 'createTable()'>
+    <header class = 'header-wrapper'>
+        <button onclick = 'downloadStaffList()' class = 'button-loader'>Загрузить</button>
+        <button onclick = 'clearTableAndLocalStorage()' class = 'button-cleaner'>Очистить</button>
+    </header>
+    <section class = 'list-wrapper'>
+        <ul id = 'rootUl'></ul>
+    </section>
+    <section class = 'table-wrapper'></section>
+    <script>
+
+        function createTable() {
+            const table = document.createElement('table');
+            const sectionTable = document.querySelector('.table-wrapper');
+            sectionTable.appendChild(table);
+            const tbody = document.createElement('tbody');
+            table.appendChild(tbody);
+            const tr = document.createElement('tr');
+            tbody.appendChild(tr);
+            const tableHeadData = ['Name', 'Surname', 'Age', 'Id', 'Number']
+            for (let k = 0; k < 5; k++) {
+                const th = document.createElement('th');
+                tr.appendChild(th);
+                th.innerText = tableHeadData[k];
+            }
+        }
+
+        function downloadStaffList () {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET','hierarchy.json', true);
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if(xhr.readyState != 4) return;
+                if(xhr.status != 200) {
+                    alert( xhr.status + ': ' + xhr.statusText );
+                } else {
+                    const staffListFromServer = JSON.parse(xhr.responseText);
+                    createNestedList(staffListFromServer);
+                }
+            }
+        }
+
+        function createNestedList(staffLFS) {
+            let objDict = staffLFS.reduce((parent, child) => {
+                parent[child.id] = child;
+                child.children = [];
+                return parent;
+            }, {});
+
+            let tree = staffLFS.reduce((parent, child) => {
+                if (child.parent_id === null) {
+                    parent.push(child);
+                } else {
+                    objDict[child.parent_id].children.push(child);
+                }
+                return parent;
+            }, []);
+
+            function proccesTree (node, element) {
+                let li = document.createElement('li');
+                li.innerText = node.name;
+                element.appendChild(li);
+                if (node.children.length) {
+                    const ul = document.createElement('ul');
+                    li.appendChild(ul);
+                    for (let i = 0; i < node.children.length; i++) {
+                        proccesTree(node.children[i], ul);
+                    }
+                }
+            }
+            tree.forEach(item => proccesTree(item, document.getElementById('rootUl')));
+            getLisWrappedBySpans();
+        }
+
+        function getLisWrappedBySpans () {
+            const treeUl = document.getElementById('rootUl');
+            const treeLis = treeUl.getElementsByTagName('li');
+            for (let i = 0; i < treeLis.length; i++) {
+                let li = treeLis[i];
+                const span = document.createElement('span');
+                li.insertBefore(span, li.firstChild);
+                span.setAttribute('id', i); //add such ids as we have in hierarchy.json
+                span.appendChild(span.nextSibling);
+                span.addEventListener('click', e => {
+                    const chooosenElementId = e.target.id;
+                    let choosenElement = e.target;
+                    choosenElement.style.background = 'lightblue';
+                    getJsonOfChoosenElementFromLocalStorage(chooosenElementId);
+                });
+            }
+        }
+
+        function getJsonOfChoosenElementFromLocalStorage (idOfTheChosenElement) {
+            
+            if (localStorage.getItem('id'+ idOfTheChosenElement.toString()) === null) {
+                downloadJsonOfChosenElementFromServer(idOfTheChosenElement);
+            } else {
+                dropDataToTheTable(JSON.parse(localStorage.getItem('id'+ idOfTheChosenElement.toString())));
+            }
+        }
+
+        function downloadJsonOfChosenElementFromServer (idOfTheChosenElement) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET','id'+idOfTheChosenElement+'.json', true);
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if(xhr.readyState != 4) return;
+                if(xhr.status != 200) {
+                    alert( xhr.status + ': ' + xhr.statusText );
+                } else {
+                    saveToLocalStotage(JSON.parse(xhr.responseText), idOfTheChosenElement);
+                }
+            }
+        }
+
+        function saveToLocalStotage (response, id) {
+                localStorage.setItem('id'+id+'', JSON.stringify(response));
+            dropDataToTheTable(response);
+        }
+
+        function dropDataToTheTable (arrOfSingleEmployee) {
+            arrOfSingleEmployee.forEach(item => {
+                let arrayOfIdData = [];
+                arrayOfIdData.push(item.name, item.surname, item.age, item.id, item.number);
+
+                let tbody = document.getElementsByTagName('tbody')[0];
+                const tr = document.createElement('tr');
+                tbody.appendChild(tr);
+                for (let numOfCell = 0; numOfCell < arrayOfIdData.length; numOfCell++) {
+                    const td = document.createElement('td');
+                    tr.appendChild(td);
+                    td.innerText = arrayOfIdData[numOfCell];
+                }
+            });
+        }
+
+        function clearTableAndLocalStorage() {
+            localStorage.clear();
+            const tbody = document.getElementsByTagName('tbody')[0];
+            const firstTableRow = tbody.firstChild;
+            while(firstTableRow.nextSibling) {
+                tbody.removeChild(tbody.lastChild);
+            }
+            const arrOfSpans = document.querySelectorAll('span');
+            for (numOfSpan = 0; numOfSpan < arrOfSpans.length; numOfSpan++) {
+                let span = document.getElementsByTagName('span')[numOfSpan];
+                span.style.background = 'white';
+            }
+        }
+    </script>
+</body>
+</html>
