@@ -30,10 +30,10 @@ Car.prototype.calculateWay = function(kilometres, fuel) {
     console.log('You\'d better to refuel because you have less than 10 litres of fuel.');
   }
   const wayTime = ((kilometres / (this.maxSpeed * 0.5))*60).toFixed(0);
-  console.log('You need' + wayTime + 'minutes to reach your destination.');
+  console.log('You need ' + wayTime + ' minutes to reach your destination.');
   if (this.fuelCapacity - kilometres / 100 * this.fuelConsumption < 0) {
     const refuelTimes = Math.ceil(kilometres / 100 * this.fuelConsumption / this.fuelCapacity);
-    console.log('You will need to refuel' + refuelTimes + 'times.');
+    console.log('You will need to refuel ' + refuelTimes + ' times.');
   }
 }
 
